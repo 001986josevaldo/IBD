@@ -3,7 +3,7 @@
 -- Prof. Esp. Elton Ricelli Ferreira de Rezende
 -- Disciplina de Introdução a Banco de Dados (4º Semestre)
 -- DB_Avaliação03
--- Show existing databases
+-- Mostrar bancos de dados existentes
 SHOW DATABASES;
 
 -- Elimine o banco de dados existente, se existir
@@ -13,7 +13,7 @@ CREATE DATABASE IF NOT EXISTS Companhia;
 USE Companhia;
 
 -- -------------------------- CRIAÇÃO DAS ESTRUTURAS ------------------------
--- Tabela Departmento
+-- Criar Tabela Departmento
 CREATE TABLE IF NOT EXISTS Departamento (
     DeptID INT AUTO_INCREMENT PRIMARY KEY,
     DeptName VARCHAR(50) NOT NULL UNIQUE,
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS Departamento (
 desc Departamento;
 
 
--- Tabela DepLoc
+-- Criar Tabela DepLoc
 CREATE TABLE IF NOT EXISTS DepLoc (
     DeptID INT,
     Localizacao VARCHAR(50) NOT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS DepLoc (
 
 DESC Deploc;
 
--- Tabela Projeto
+-- Criar Tabela Projeto
 CREATE TABLE IF NOT EXISTS Projeto (
     ProjID INT AUTO_INCREMENT PRIMARY KEY,
     ProjName VARCHAR(50) NOT NULL UNIQUE,
@@ -44,17 +44,15 @@ CREATE TABLE IF NOT EXISTS Projeto (
 
 describe Projeto;
 
-
--- funcionário 
--- Tabela funcionaro
+-- Criar Tabela funcionaro
 CREATE TABLE IF NOT EXISTS Funcionario (
     EmpID INT AUTO_INCREMENT PRIMARY KEY,
     EmpName VARCHAR(50) NOT NULL,
-    SSN CHAR(9) NOT NULL UNIQUE,
-    Address VARCHAR(100),
-    Salary DECIMAL(10, 2),
+    RG CHAR(9) NOT NULL UNIQUE,
+    Endereco VARCHAR(100),
+    Salario DECIMAL(10, 2),
     Sexo CHAR(1) not null check (sexo in ('M','F')),
-    BirthDate DATE,
+    DataNasc DATE,
     DeptID INT,
     SupervisorID INT,
     FOREIGN KEY (DeptID) REFERENCES Departamento(DeptID),
@@ -79,32 +77,32 @@ CREATE TABLE IF NOT EXISTS Trabalhador (
 -- Tabela Dependente
 CREATE TABLE IF NOT EXISTS Dependente (
     EmpID INT,
-    DependenteName VARCHAR(50),
-    Sex CHAR(1),
-    BirthDate DATE,
-    Relationship VARCHAR(25),
-    PRIMARY KEY (EmpID, DependenteName),
+    DependenteNome VARCHAR(50),
+    Sexo CHAR(1),
+    DataNasc DATE,
+    Relacao VARCHAR(25),
+    PRIMARY KEY (EmpID, DependenteNome),
     FOREIGN KEY (EmpID) REFERENCES Funcionario(EmpID)
 );
 
 -- Inserir dados de exemplo
 -- Inserir dados na tabela Department
 INSERT INTO Departamento (DeptName, GerenteID, DataInicio) VALUES
-('HR', NULL, '2020-01-01'),
-('Engineering', NULL, '2020-01-01'),
+('Recursos Humanos', NULL, '2020-01-01'),
+('Engenharia', NULL, '2020-01-01'),
 ('Marketing', NULL, '2020-01-01');
 
 -- Inserir dados na tabela DepLoc
 INSERT INTO DepLoc (DeptID, Localizacao) VALUES
 (1, 'Rondonópolis'),
-(2, 'San Francisco'),
+(2, 'Alto Araguaia'),
 (3, 'Pedra Preta');
 
 -- Inserir dados na tabela Funcionario
-INSERT INTO Funcionario (EmpName, SSN, Address, Salary, Sexo, BirthDate, DeptID, SupervisorID) VALUES
-('John Doe', '123456789', '123 Elm St', 60000, 'M', '1980-01-01', 1, NULL),
-('Jane Smith', '987654321', '456 Oak St', 65000, 'F', '1985-02-02', 2, 1),
-('Alice Johnson', '555555555', '789 Pine St', 70000, 'F', '1990-03-03', 3, 1);
+INSERT INTO Funcionario (EmpName, RG, Endereco, Salario, Sexo, DataNasc, DeptID, SupervisorID) VALUES
+('Jose Santos', '123456789', 'Rondonópolis', 60000, 'M', '1980-01-01', 1, NULL),
+('Janaina Pereira', '987654321', 'Alto Araguaia', 65000, 'F', '1985-02-02', 2, 1),
+('Alice Souza', '555555555', 'Pedra Preta', 70000, 'F', '1990-03-03', 3, 1);
 
 -- Atualizar ManagerID na tabela Department
 UPDATE Departamento SET GerenteID = 1 WHERE DeptID = 1;
@@ -126,10 +124,10 @@ INSERT INTO Trabalhador (EmpID, ProjID, Hours) VALUES
 (2, 3, 10.0);
 
 -- Inserir dados na tabela Dependente
-INSERT INTO Dependente (EmpID, DependenteName, Sex, BirthDate, Relationship) VALUES
-(1, 'Anna Doe', 'F', '2010-04-04', 'Daughter'),
-(2, 'Tom Smith', 'M', '2012-05-05', 'Son'),
-(3, 'Sam Johnson', 'M', '2014-06-06', 'Son');
+INSERT INTO Dependente (EmpID, DependenteNome, Sexo, DataNasc, Relacao) VALUES
+(1, 'Anna da Silva', 'F', '2010-04-04', 'Filha'),
+(2, 'Tom Jerry', 'M', '2012-05-05', 'Filho'),
+(3, 'Joao macedo', 'M', '2014-06-06', 'Filho');
 
 -- Consultar dados para verificar
 SELECT * FROM Departamento;
