@@ -1,5 +1,5 @@
 
-descrição das três etapas de normalização de tabelas
+Descrição das três etapas de normalização de tabelas
 
 1ª Forma Normal (1NF)
 
