@@ -1,19 +1,25 @@
+-- mostrar bancos de dados
 show databases;
-create database aulaSEG;
+
+-- Remover a base de dados se existir
+DROP DATABASE if EXISTS aulaseg;
+
+-- Criar a nova base de dados
+create database if not EXISTS aulaSEG;
 show databases;
+-- usar a base de dados
 USE aulaseg;
+-- Mostrar tabelas
 show tables;
 
-create table pai(
-cod_Pai int not null primary key auto_increment, 
-nome_pai char(50) not null, 
-idade_pai tinyint not null);
+-- Criar tabela Pai
+CREATE TABLE Pai (
+    Cod_Pai INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+    Nome_Pai VARCHAR(50) NOT NULL, 
+    Idade_Pai TINYINT NOT NULL
+);
 
 show tables;
-
-DROP DATABASE IF EXISTS BD_UNION;
-CREATE DATABASE BD_UNION;
-USE BD_UNION;
 
 CREATE TABLE IF NOT EXISTS Pai (
     Cod_Pai INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -23,54 +29,71 @@ CREATE TABLE IF NOT EXISTS Pai (
 
 desc pai;
 
+-- Criar tabela Filho
 CREATE TABLE IF NOT EXISTS Filho (
     Cod_Filho INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    Cod_Pai INT NOT NULL REFERENCES Pai (Cod_pai),
+    Cod_Pai INT NOT NULL,
     Nome_Filho VARCHAR(30) NOT NULL,
-    Sexo_Filho CHAR(01) NOT NULL CHECK (Sexo_Filho IN ('F' , 'M'))
+    Sexo_Filho CHAR(1) NOT NULL CHECK (Sexo_Filho IN ('F', 'M')),
+    FOREIGN KEY (Cod_Pai) REFERENCES Pai (Cod_Pai)
 );
 desc filho;
 
+-- Inserir dados na tabela Pai
 INSERT INTO Pai (Nome_Pai, Idade_Pai) VALUES 
-("Daniel de Souza Leão Sobrinho", 62),
-("João Carlos da Silva", 38),
-("Fernando de Oliveira", 36),
-("Homi Seu Mininu", 29);
+    ("Daniel de Souza Leão Sobrinho", 62),
+    ("João Carlos da Silva", 38),
+    ("Fernando de Oliveira", 36),
+    ("Homi Seu Mininu", 29)
+;
 
+-- Inserir dados na tabela Filho
 INSERT INTO Filho VaLUES 
-(NULL, 1, "Renata de Oliveira Leão", "F"),
-(NULL, 1, "Fernando de Oliveira Leão", "M"),
-(NULL, 1, "ROberta de Oliveira Leão", "F"),
-(NULL, 1, "JAIro de Oliveira Leão", "M"),
-(NULL, 2, "GiOVanna da Silva", "F"),
-(NULL, 3, "LuCAs Ribeiro Oliveira", "M"),
-(NULL, 3, "HeLDer Ribeiro Oliveira", "M");
+    (NULL, 1, "Renata de Oliveira Leão", "F"),
+    (NULL, 1, "Fernando de Oliveira Leão", "M"),
+    (NULL, 1, "Roberta de Oliveira Leão", "F"),
+    (NULL, 1, "Jairo de Oliveira Leão", "M"),
+    (NULL, 2, "Giovanna da Silva", "F"),
+    (NULL, 3, "Lucas Ribeiro Oliveira", "M"),
+    (NULL, 3, "Helder Ribeiro Oliveira", "M")
+;
 
 select * from pai;
 select * from filho;
 
 
-SELECT Pai.Nome_Pai as 'Nome do Pai',
-                Filho.Nome_Filho  as 'Nome do Filho',
-                Filho.Sexo_Filho AS SexoFROM Pai INNER 
-		JOIN Filho ON (Pai.Cod_Pai = Filho.Cod_Pai);
-
+-- Selecionar Pai e Filho com INNER JOIN
+SELECT 
+    Pai.Nome_Pai AS 'Nome do Pai',
+    Filho.Nome_Filho AS 'Nome do Filho',
+    Filho.Sexo_Filho AS Sexo
+FROM Pai 
+    INNER JOIN Filho ON Pai.Cod_Pai = Filho.Cod_Pai
+;
     
-SELECT *
-FROM Pai INNER JOIN Filho
-ON Pai.Cod_Pai = Filho.Cod_Pai;
+-- Selecionar tudo de Pai e Filho com INNER JOIN
+SELECT * FROM Pai 
+    INNER JOIN Filho ON Pai.Cod_Pai = Filho.Cod_Pai
+;
 
-SELECT Pai.Nome_Pai AS 'Nome do Pai',
-Filho.Nome_Filho AS 'Nome do Filho',
-Filho.Sexo_Filho AS Sexo
-FROM Pai LEFT OUTER JOIN Filho
-ON (Pai.Cod_Pai = Filho.Cod_Pai);
+-- Selecionar Pai e Filho com LEFT JOIN
+SELECT 
+    Pai.Nome_Pai AS 'Nome do Pai',
+    Filho.Nome_Filho AS 'Nome do Filho',
+    Filho.Sexo_Filho AS Sexo
+FROM Pai 
+    LEFT OUTER JOIN Filho
+    ON (Pai.Cod_Pai = Filho.Cod_Pai)
+;
 
-SELECT Pai.Nome_Pai AS 'Nome do Pai',
-Filho.Nome_Filho AS 'Nome do Filho',
-Filho.Sexo_Filho AS Sexo 
-FROM Pai LEFT OUTER JOIN Filho 
-ON (Pai.Cod_Pai = Filho.Cod_Pai)
-where filho.nome_filho is null;
+-- Selecionar Pai sem filho
+SELECT 
+    Pai.Nome_Pai AS 'Nome do Pai',
+    Filho.Nome_Filho AS 'Nome do Filho',
+    Filho.Sexo_Filho AS Sexo 
+FROM Pai 
+LEFT OUTER JOIN Filho ON (Pai.Cod_Pai = Filho.Cod_Pai)
+where filho.nome_filho is null
+;
 
 

@@ -131,10 +131,10 @@ select * from actormovies;
 -- drop TABLE actorseries;
 CREATE TABLE if not exists ActorSeries(
 	actorSeriesId INTEGER AUTO_INCREMENT PRIMARY KEY,
-ActorsID INT(6), 
-seriesID INT(6), 
-FOREIGN KEY (ActorsID) REFERENCES Actors(ActorsID), 
-FOREIGN KEY (seriesID) REFERENCES seriesData(seriesID));
+	ActorsID INT(6), 
+	seriesID INT(6), 
+	FOREIGN KEY (ActorsID) REFERENCES Actors(ActorsID), 
+	FOREIGN KEY (seriesID) REFERENCES seriesData(seriesID));
 SHOW create TABLE actormovies;
 
 -- INSERIR OS DADOS NA TABELA ActorSeries
@@ -148,35 +148,40 @@ VALUES
 -- Verificar os dados inseridos na tabela ActorSeries
 SELECT * FROM ActorSeries;
 
-
-
-
-
-
-
-
 -- ---------- seleções -------------
-SELECT * FROM MoviesData M JOIN Actors A on A.ActorsID = M.ActorsFK;
-
-SELECT * FROM SeriesData S JOIN Actors A on A.ActorsID = S.ActorsFK;
-
-SELECT * FROM MoviesData M JOIN Actors A ON A.ActorsID = M.ActorsFK, 
-	            SeriesData S JOIN Actors Ac on Ac.ActorsID = S.ActorsFK;
-
-SELECT * FROM MoviesData M JOIN Actors A ON A.ActorsID = M.ActorsFK
-	JOIN 
-	            SeriesData S JOIN Actors Ac on Ac.ActorsID = S.ActorsFK;
-
-SELECT A.ActorsName, MoviesName, SeriesData FROM MoviesData M JOIN Actors A ON A.ActorsID = M.ActorsFK
-	JOIN 
-	            SeriesData S JOIN Actors Ac on Ac.ActorsID = S.ActorsFK;
+-- Seleciona todos os filmes com seus atores
+SELECT * FROM actorMovies M 
+JOIN Actors A ON A.ActorsID = M.`ActorsID`;
 
 
--- UNION para MOSTRAR TODAS AS OBRAS (Tanto Filmes quanto Séries)
+-- Seleciona todas as séries com seus atores
+SELECT * FROM actorseries S 
+JOIN Actors A ON A.ActorsID = S.`ActorsID`;
 
-SELECT * FROM MoviesData M JOIN Actors A on A.ActorsID = M.ActorsFK
+-- Combinação dos dados de filmes e séries com seus atores
+SELECT * 
+FROM actormovies M 
+JOIN Actors A ON A.ActorsID = M.`ActorsID` 
+JOIN actorseries S ON A.ActorsID = S.`ActorsID`;
+
+-- Seleciona o nome dos atores, filmes e séries
+SELECT A.ActorsName, MD.MoviesName, SD.SeriesData
+FROM ActorMovies AM
+JOIN Actors A ON A.ActorsID = AM.ActorsID
+JOIN MoviesData MD ON MD.MoviesID = AM.MoviesID
+JOIN ActorSeries ASR ON A.ActorsID = ASR.ActorsID
+JOIN SeriesData SD ON SD.SeriesID = ASR.SeriesID;
+
+-- O SELECT mostra o nome do ator, 
+-- o nome do filme da tabela de filmes e o nome da série
+-- A.ActorsName: É o nome do ator,MD.MoviesName é o nome do filme as Obra renomeia a coluna 
+SELECT A.ActorsName, MD.MoviesName AS Obra 
+FROM ActorMovies AM
+JOIN Actors A ON A.ActorsID = AM.ActorsID
+JOIN MoviesData MD ON MD.MoviesID = AM.MoviesID
 UNION
-SELECT * FROM SeriesData S JOIN Actors A on A.ActorsID = S.ActorsFK;
-----------------------------------------
--- Caso a sua estrutura Movies e Seires possam ter mais de um Actor então sua estrutura é de N:N, muitos para muitos. Então deve ser criado 2 tabelas de ralacionamento para MoviesData e SeriesData:
-
+-- A.`ActorsName é o nome do ator, SD.`SeriesData`é o nome da serie, as obra renomeia a coluna  
+SELECT A.ActorsName, SD.SeriesData AS Obra 
+FROM ActorSeries ASR
+JOIN Actors A ON A.ActorsID = ASR.ActorsID
+JOIN SeriesData SD ON SD.SeriesID = ASR.SeriesID;
